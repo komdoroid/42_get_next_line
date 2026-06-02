@@ -6,7 +6,7 @@
 /*   By: kkomurat <kkomurat@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 15:52:35 by kkomurat          #+#    #+#             */
-/*   Updated: 2026/05/26 17:02:03 by kkomurat         ###   ########.fr       */
+/*   Updated: 2026/06/01 22:20:45 by kkomurat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,12 @@
 
 char	*get_next_line(int fd)
 {
+	void	*buf;
+
 	if (!fd)
 		return (NULL);
+	while (
+	buf = 
 }
 
 int	main(int argc, char *argv[])
