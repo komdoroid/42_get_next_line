@@ -17,7 +17,17 @@
 #include <stdlib.h>
 #include <limits.h>
 
+# define OPEN_MAX 1024
+
 # ifndef BUFFER_SIZE
 #	define BUFFER_SIZE 42
 # endif
 #endif
+
+char	*get_next_line(int fd);
+char	*gnl_free(char **stash, char **buf, char **tmp);
+char	*extract_line(char **stash, int size);
+void	update_stash(char **stash, int size);
+int	ft_strlen(const char *str);
+char	*gnl_strjoin(char const *s1, char const *s2);
+int	gnl_strchr(const char *s, int c);

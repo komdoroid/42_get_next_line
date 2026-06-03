@@ -11,60 +11,106 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
 char	*get_next_line(int fd)
 {
 	char	*buf;
 	char	*tmp;
 	static char	*stash[OPEN_MAX];
-	int	ret_code;
-	int	line_break;
+	int	read_ret;
 
-
+	buf = NULL;
+	tmp = NULL;
 	if (fd == -1)
 		return (NULL);
-	ret_code = 0;
-	line_break = -1;
-	while (line_break == -1)
+	while (gnl_strchr(stash[fd], '\n') == -1 && read_ret!= 0)
 	{
 		buf = malloc(sizeof(char) * BUFFER_SIZE);
 		if (!buf)
-			return (gnl_free(&stash[fd], &buf, &tmp))
-		if (read(fd, buf, BUFFER_SIZE) == -1)
 			return (gnl_free(&stash[fd], &buf, &tmp));
-		tmp = ft_strjoin(stash[fd], buf);
+		read_ret = read(fd, buf, BUFFER_SIZE);
+		if (read_ret == -1 || read_ret == 0)
+			return (gnl_free(&stash[fd], &buf, &tmp));
+		tmp = gnl_strjoin(stash[fd], buf);
 		free(stash[fd]);
 		stash[fd] = tmp;
 		free(buf);
-		free(tmp);
 	}
-	return (trim_stash(&stash[fd]));
+	return (extract_line(&stash[fd], gnl_strchr(stash[fd], '\n')));
 }
 
-char	*gnl_free(stash, buf, tmp)
+char	*gnl_free(char **stash, char **buf, char **tmp)
 {
-	free(stash);
-	free(buf);
-	free(tmp);
+	free(*stash);
+	*stash = NULL;
+	free(*buf);
+	free(*tmp);
 	return (NULL);
 }
 
-char	*trim_stash(char *stash)
+char	*extract_line(char **stash, int size)
 {
-	while (stash[i] != '\n')
-		i++;
+	char	*ret;
+	int	i;
 
-int	main(int argc, char *argv[])
-{
-	FILE *fd;
-	char	buffer[256];
-
-	if (argc > 1)
+	if (!*stash || (*stash)[0] == '\0')
+		return (NULL);
+	if (size == -1)
+		size = ft_strlen(*stash);
+	ret = (char *)malloc(sizeof(char) * (size + 1));
+	if (!ret)
+		return (NULL);
+	i = 0;
+	while (i < size)
 	{
-		fd = read();
-		if (fd == NULL)
-			return (1);
+		ret[i] = (*stash)[i];
+		i++;
 	}
-	else 
-		fd = stdin;
+	ret[i] = '\0';
+	update_stash(stash, size);
+	return (ret);
+}
+
+void	update_stash(char **stash, int size)
+{
+	char	*ret;
+	int	i;
+	int	total;
+
+	total = ft_strlen(*stash);
+	ret = (char *)malloc(sizeof(char) * (total - size + 1));
+	if (!ret)
+		return ;
+	i = 0;
+	while (i + size < total)
+	{
+		ret[i] = (*stash)[i + size];
+		i++;
+	}
+	ret[i] = '\0';
+	free(*stash);
+	*stash = ret;
+}
+
+#include <fcntl.h>
+
+int	main(void)
+{
+	int	fd;
+	char	*line;
+
+	fd = open("test.txt", O_RDONLY);
+	if (fd == -1)
+	{
+		printf("cant open\n");
+		return (1);
+	}
+	while ((line = get_next_line(fd)) != NULL)
+	{
+		printf("%s", line);
+		free(line);
+	}
+	close(fd);
+	return (0);
 }
