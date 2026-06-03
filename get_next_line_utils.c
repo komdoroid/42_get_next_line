@@ -51,19 +51,19 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (strjoin);
 }	
 
-int	*ft_strchr(const char *s, int c)
+int	*gnl_strchr(const char *s, int c)
 {
 	int	i;
 
 	i = 0;
 	while (s[i] != '\0')
 	{
-		if (*s == (char)c)
-			return ((char *)s);
-		s++;
+		if (s[i] == (char)c)
+			return (i);
+		i++;
 	}
-	if (*s == (char)c)
-		return ((char *)s);
-	return (NULL);
+	if (s[i] == (char)c)
+		return (i);
+	return (-1);
 }
 

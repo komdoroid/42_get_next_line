@@ -14,25 +14,45 @@
 
 char	*get_next_line(int fd)
 {
-	void	*buf;
+	char	*buf;
+	char	*tmp;
 	static char	*stash[OPEN_MAX];
+	int	ret_code;
+	int	line_break;
 
 
 	if (fd == -1)
 		return (NULL);
-	buf = malloc(sizeof(char) * BUFFER_SIZE);
-	if (!buf)
-		return (NULL)
-	if (read(fd, buf, BUFFER_SIZE) == -1)
-		return (NULL);
-	stash[fd] = ft_strjoin(stash[fd], buf);
-	while(1)
+	ret_code = 0;
+	line_break = -1;
+	while (line_break == -1)
 	{
-		while (stash[fd][i])
-		{
-			if (stash[fd][i] == '\n')
-
+		buf = malloc(sizeof(char) * BUFFER_SIZE);
+		if (!buf)
+			return (gnl_free(&stash[fd], &buf, &tmp))
+		if (read(fd, buf, BUFFER_SIZE) == -1)
+			return (gnl_free(&stash[fd], &buf, &tmp));
+		tmp = ft_strjoin(stash[fd], buf);
+		free(stash[fd]);
+		stash[fd] = tmp;
+		free(buf);
+		free(tmp);
+	}
+	return (trim_stash(&stash[fd]));
 }
+
+char	*gnl_free(stash, buf, tmp)
+{
+	free(stash);
+	free(buf);
+	free(tmp);
+	return (NULL);
+}
+
+char	*trim_stash(char *stash)
+{
+	while (stash[i] != '\n')
+		i++;
 
 int	main(int argc, char *argv[])
 {
