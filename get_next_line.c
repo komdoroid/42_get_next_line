@@ -22,16 +22,18 @@ char	*get_next_line(int fd)
 
 	buf = NULL;
 	tmp = NULL;
-	if (fd == -1)
+	if (fd == -1 || BUFFER_SIZE < 0)
 		return (NULL);
-	while (gnl_strchr(stash[fd], '\n') == -1 && read_ret!= 0)
+	read_ret = 1;
+	while (gnl_strchr(stash[fd], '\n') == -1 && read_ret != 0)
 	{
-		buf = malloc(sizeof(char) * BUFFER_SIZE);
+		buf = malloc(sizeof(char) * BUFFER_SIZE + 1);
 		if (!buf)
 			return (gnl_free(&stash[fd], &buf, &tmp));
 		read_ret = read(fd, buf, BUFFER_SIZE);
 		if (read_ret == -1 || read_ret == 0)
 			return (gnl_free(&stash[fd], &buf, &tmp));
+		buf[BUFFER_SIZE] = '\0';
 		tmp = gnl_strjoin(stash[fd], buf);
 		free(stash[fd]);
 		stash[fd] = tmp;
