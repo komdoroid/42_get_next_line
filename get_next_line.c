@@ -6,19 +6,18 @@
 /*   By: kkomurat <kkomurat@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 15:52:35 by kkomurat          #+#    #+#             */
-/*   Updated: 2026/06/02 23:33:41 by kkomurat         ###   ########.fr       */
+/*   Updated: 2026/06/05 20:31:56 by kkomurat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
 char	*get_next_line(int fd)
 {
-	char	*buf;
-	char	*tmp;
+	char		*buf;
+	char		*tmp;
 	static char	*stash[OPEN_MAX];
-	int	read_ret;
+	int			read_ret;
 
 	buf = NULL;
 	tmp = NULL;
@@ -33,7 +32,7 @@ char	*get_next_line(int fd)
 		read_ret = read(fd, buf, BUFFER_SIZE);
 		if (read_ret == -1 || read_ret == 0)
 			return (gnl_free(&stash[fd], &buf, &tmp));
-		buf[BUFFER_SIZE] = '\0';
+		buf[read_ret] = '\0';
 		tmp = gnl_strjoin(stash[fd], buf);
 		free(stash[fd]);
 		stash[fd] = tmp;
@@ -54,7 +53,7 @@ char	*gnl_free(char **stash, char **buf, char **tmp)
 char	*extract_line(char **stash, int size)
 {
 	char	*ret;
-	int	i;
+	int		i;
 
 	if (!*stash || (*stash)[0] == '\0')
 		return (NULL);
@@ -77,8 +76,8 @@ char	*extract_line(char **stash, int size)
 void	update_stash(char **stash, int size)
 {
 	char	*ret;
-	int	i;
-	int	total;
+	int		i;
+	int		total;
 
 	total = ft_strlen(*stash);
 	ret = (char *)malloc(sizeof(char) * (total - size + 1));
@@ -96,11 +95,14 @@ void	update_stash(char **stash, int size)
 }
 
 #include <fcntl.h>
+#include <stdio.h>
 
 int	main(void)
 {
-	int	fd;
+	int		fd;
+	int		fd2;
 	char	*line;
+	char	*line2;
 
 	fd = open("test.txt", O_RDONLY);
 	if (fd == -1)
@@ -108,11 +110,26 @@ int	main(void)
 		printf("cant open\n");
 		return (1);
 	}
-	while ((line = get_next_line(fd)) != NULL)
+	fd2 = open("test2.txt", O_RDONLY);
+	if (fd == -1)
 	{
-		printf("%s", line);
-		free(line);
+		printf("cant open\n");
+		return (1);
 	}
+	while (1)
+	{
+		line = get_next_line(fd);
+		if (line != NULL)
+			printf("%s", line);
+		line2 = get_next_line(fd2);
+		if (line2 != NULL)
+			printf("%s", line2);
+		if (line == NULL && line2 == NULL)
+			break;
+	}
+	free(line);
+	free(line2);
 	close(fd);
+	close(fd2);
 	return (0);
 }

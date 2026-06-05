@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkomurat <kkomurat@student.42.jp>          +#+  +:+       +#+        */
+/*   By: kkomurat <kkomurat@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/02 20:37:15 by kkomurat          #+#    #+#             */
-/*   Updated: 2026/06/02 21:13:55 by kkomurat         ###   ########.fr       */
+/*   Updated: 2026/06/05 19:51:41 by kkomurat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,15 @@ int	ft_strlen(char const *str)
 
 char	*gnl_strjoin(char const *s1, char const *s2)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 	char	*strjoin;
 
 	if (s1 == NULL)
 		s1 = "";
 	if (s2 == NULL)
 		return (NULL);
-	strjoin = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2)+ 1));
+	strjoin = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
 	if (strjoin == NULL)
 		return (NULL);
 	i = 0;
@@ -49,7 +49,7 @@ char	*gnl_strjoin(char const *s1, char const *s2)
 	}
 	strjoin[i + j] = '\0';
 	return (strjoin);
-}	
+}
 
 int	gnl_strchr(const char *s, int c)
 {
@@ -68,5 +68,3 @@ int	gnl_strchr(const char *s, int c)
 		return (i + 1);
 	return (-1);
 }
-
-
