@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*get_next_line(int fd)
 {
@@ -21,7 +21,7 @@ char	*get_next_line(int fd)
 
 	buf = NULL;
 	tmp = NULL;
-	if (fd == -1 || BUFFER_SIZE < 0)
+	if (fd < 0 || BUFFER_SIZE < 0
 		return (NULL);
 	read_ret = 1;
 	while (gnl_strchr(stash[fd], '\n') == -1 && read_ret != 0)
@@ -36,6 +36,7 @@ char	*get_next_line(int fd)
 		tmp = gnl_strjoin(stash[fd], buf);
 		free(stash[fd]);
 		stash[fd] = tmp;
+		tmp = NULL;
 		free(buf);
 	}
 	return (extract_line(&stash[fd], gnl_strchr(stash[fd], '\n')));

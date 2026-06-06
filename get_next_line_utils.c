@@ -51,20 +51,20 @@ char	*gnl_strjoin(char const *s1, char const *s2)
 	return (strjoin);
 }
 
-int	gnl_strchr(const char *s, int c)
+char	*gnl_strchr(const char *s, int c)
 {
 	int	i;
 
 	if (!s)
-		return (-1);
+		return (NULL);
 	i = 0;
-	while (s[i] != '\0')
+	while (*s != '\0')
 	{
-		if (s[i] == (char)c)
-			return (i + 1);
-		i++;
+		if (*s == (char)c)
+			return (s);
+		s++;
 	}
-	if (s[i] == (char)c)
-		return (i + 1);
-	return (-1);
+	if (*s == (char)c)
+		return (s);
+	return (NULL);
 }

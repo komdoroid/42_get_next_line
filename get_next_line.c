@@ -15,84 +15,21 @@
 char	*get_next_line(int fd)
 {
 	char		*buf;
-	char		*tmp;
 	static char	*stash[OPEN_MAX];
 	int			read_ret;
 
 	buf = NULL;
-	tmp = NULL;
-	if (fd == -1 || BUFFER_SIZE < 0)
-		return (NULL);
-	read_ret = 1;
-	while (gnl_strchr(stash[fd], '\n') == -1 && read_ret != 0)
+	read_len = BFFER_SIZE
+	while (gnl_strchr(stash, '\n') && read_len > 0)
 	{
-		buf = malloc(sizeof(char) * BUFFER_SIZE + 1);
-		if (!buf)
-			return (gnl_free(&stash[fd], &buf, &tmp));
-		read_ret = read(fd, buf, BUFFER_SIZE);
-		if (read_ret == -1 || read_ret == 0)
-			return (gnl_free(&stash[fd], &buf, &tmp));
-		buf[read_ret] = '\0';
-		tmp = gnl_strjoin(stash[fd], buf);
-		free(stash[fd]);
-		stash[fd] = tmp;
-		free(buf);
+		read_len = read(fd, buf, BUFFER_SIZE);
+		stash = gnl_strjoin();
 	}
-	return (extract_line(&stash[fd], gnl_strchr(stash[fd], '\n')));
+	ret = extract_line();
+	stash = update_stash();
 }
 
-char	*gnl_free(char **stash, char **buf, char **tmp)
-{
-	free(*stash);
-	*stash = NULL;
-	free(*buf);
-	free(*tmp);
-	return (NULL);
-}
 
-char	*extract_line(char **stash, int size)
-{
-	char	*ret;
-	int		i;
-
-	if (!*stash || (*stash)[0] == '\0')
-		return (NULL);
-	if (size == -1)
-		size = ft_strlen(*stash);
-	ret = (char *)malloc(sizeof(char) * (size + 1));
-	if (!ret)
-		return (NULL);
-	i = 0;
-	while (i < size)
-	{
-		ret[i] = (*stash)[i];
-		i++;
-	}
-	ret[i] = '\0';
-	update_stash(stash, size);
-	return (ret);
-}
-
-void	update_stash(char **stash, int size)
-{
-	char	*ret;
-	int		i;
-	int		total;
-
-	total = ft_strlen(*stash);
-	ret = (char *)malloc(sizeof(char) * (total - size + 1));
-	if (!ret)
-		return ;
-	i = 0;
-	while (i + size < total)
-	{
-		ret[i] = (*stash)[i + size];
-		i++;
-	}
-	ret[i] = '\0';
-	free(*stash);
-	*stash = ret;
-}
 
 // #include <fcntl.h>
 // #include <stdio.h>
