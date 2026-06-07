@@ -1,33 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kkomurat <kkomurat@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 15:52:35 by kkomurat          #+#    #+#             */
-/*   Updated: 2026/06/07 15:52:17 by kkomurat         ###   ########.fr       */
+/*   Updated: 2026/06/07 16:45:13 by kkomurat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*get_next_line(int fd)
 {
-	static char	*stash;
+	static char	*stash[OPEN_MAX];
 	char		*ret;
 	char		*tmp;
 
-	stash = lead_to_stash(fd, stash);
-	if (!stash || stash[0] == '\0')
+	stash[fd] = lead_to_stash(fd, stash[fd]);
+	if (!stash[fd] || stash[fd][0] == '\0')
 	{
-		free(stash);
-		stash = NULL;
+		free(stash[fd]);
+		stash[fd] = NULL;
 		return (NULL);
 	}
-	ret = extract_line(stash);
-	tmp = update_stash(stash);
-	stash = tmp;
+	ret = extract_line(stash[fd]);
+	tmp = update_stash(stash[fd]);
+	stash[fd] = tmp;
 	return (ret);
 }
 
@@ -104,9 +104,17 @@ char	*update_stash(char *stash)
 // int	main(void)
 // {
 // 	int		fd;
+// 	int		fd2;
 // 	char	*line;
+// 	char	*line2;
 // 
 // 	fd = open("test.txt", O_RDONLY);
+// 	if (fd == -1)
+// 	{
+// 		printf("cant open\n");
+// 		return (1);
+// 	}
+// 	fd2 = open("test2.txt", O_RDONLY);
 // 	if (fd == -1)
 // 	{
 // 		printf("cant open\n");
@@ -115,12 +123,18 @@ char	*update_stash(char *stash)
 // 	while (1)
 // 	{
 // 		line = get_next_line(fd);
-// 		if (line == NULL)
+// 		if (line != NULL)
+// 			printf("%s", line);
+// 		line2 = get_next_line(fd2);
+// 		if (line2 != NULL)
+// 			printf("%s", line2);
+// 		if (line == NULL && line2 == NULL)
 // 			break;
-// 		printf("%s", line);
-// 		free(line);
-// 		line = NULL;
 // 	}
+// 	free(line);
+// 	free(line2);
 // 	close(fd);
+// 	close(fd2);
 // 	return (0);
 // }
+// 

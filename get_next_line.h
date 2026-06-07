@@ -6,7 +6,7 @@
 /*   By: kkomurat <kkomurat@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/02 20:17:17 by kkomurat          #+#    #+#             */
-/*   Updated: 2026/06/07 14:40:53 by kkomurat         ###   ########.fr       */
+/*   Updated: 2026/06/07 16:47:34 by kkomurat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,12 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-# define OPEN_MAX 1024
-
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 1
 # endif
 
 char	*get_next_line(int fd);
 char	*lead_to_stash(int fd, char *stash);
-char	*gnl_free(char **stash, char **buf, char **tmp);
 char	*extract_line(char *stash);
 char	*update_stash(char *stash);
 int		ft_strlen(const char *str);

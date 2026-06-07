@@ -32,6 +32,17 @@ cc -Wall -Wextra -Werror -D BUFFER_SIZE=42 get_next_line.c get_next_line_utils.c
 
 The `BUFFER_SIZE` macro defines how many bytes `read()` fetches per call. You can change this value to test different behaviors. If omitted, a default value defined in the header is used.
 
+### Memory Debugging
+
+```bash
+valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./a.out
+```
+**--lead-check=full** : Reports every individual leaded block with full stack trace showing where it was allocated.
+
+**--show-lead-kinds=all** : Shows all four categories of leaks.
+
+**--track-origins=yes** : Tracks where uninitialised values came from, making it easier to debug errors like *Conditional jump depends on unininitialised value.*
+
 ### Usage
 
 **main func**

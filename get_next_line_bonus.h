@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kkomurat <kkomurat@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/02 20:17:17 by kkomurat          #+#    #+#             */
-/*   Updated: 2026/06/07 14:40:53 by kkomurat         ###   ########.fr       */
+/*   Updated: 2026/06/07 16:47:42 by kkomurat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 
 # include <limits.h>
 # include <stdlib.h>
@@ -25,7 +25,6 @@
 
 char	*get_next_line(int fd);
 char	*lead_to_stash(int fd, char *stash);
-char	*gnl_free(char **stash, char **buf, char **tmp);
 char	*extract_line(char *stash);
 char	*update_stash(char *stash);
 int		ft_strlen(const char *str);
