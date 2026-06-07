@@ -15,7 +15,7 @@
 char	*get_next_line(int fd)
 {
 	char		*buf;
-	static char	*stash[OPEN_MAX];
+	static char	*stash;
 	int			read_ret;
 
 	buf = NULL;
@@ -23,13 +23,49 @@ char	*get_next_line(int fd)
 	while (gnl_strchr(stash, '\n') && read_len > 0)
 	{
 		read_len = read(fd, buf, BUFFER_SIZE);
-		stash = gnl_strjoin();
+		if (stash == NULL)
+			stash = "";
+		stash = gnl_strjoin(stash, buf);
 	}
-	ret = extract_line();
+	ret = extract_line(stash);
 	stash = update_stash();
+	return (ret);
 }
 
+char	*extract_line(char *stash)
+{
+	int	i;
+	int	size;
+	char	*ret;
 
+	i = 0;
+	size = 0;
+	while (stash[size] && stash[size] != '\n')
+		size++;
+	ret = (char *)malloc(size + 2);
+	while (stash[i] && stash[i] != '\n')
+	{
+		ret[i] = stash[i];
+		i++;
+	}
+	if (stash[i] == '\n')
+		ret[i++] = '\n';
+	ret[i] = '\0';
+	return (ret);
+}
+
+char	*update_stash(char *stash)
+{
+	int	start;
+	char	*ret
+
+	start = 0;
+	while (stash[start] && stash[start] != '\n')
+		start++;
+	ret = ft_substr(stash, start + 1, ft_strlen(stash));
+	free(stash);
+	return (ret);
+}
 
 // #include <fcntl.h>
 // #include <stdio.h>

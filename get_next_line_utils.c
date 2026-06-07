@@ -68,3 +68,29 @@ char	*gnl_strchr(const char *s, int c)
 		return (s);
 	return (NULL);
 }
+
+char	*ft_substr(char const *s, unsigned int start, size_t len)
+{
+	size_t	i;
+	size_t	slen;
+	char	*substr;
+
+	if (s == NULL)
+		return (NULL);
+	slen = ft_strlen(s);
+	if (start >= slen)
+		return (ft_strdup(""));
+	if (len > slen - start)
+		len = slen - start;
+	substr = (char *)malloc(sizeof(char) * (len + 1));
+	if (substr == NULL)
+		return (NULL);
+	i = 0;
+	while (i < len && s[start + i] != '\0')
+	{
+		substr[i] = s[start + i];
+		i++;
+	}
+	substr[i] = '\0';
+	return (substr);
+}
