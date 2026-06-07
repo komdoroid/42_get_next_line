@@ -1,140 +1,126 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kkomurat <kkomurat@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 15:52:35 by kkomurat          #+#    #+#             */
-/*   Updated: 2026/06/07 15:39:37 by kkomurat         ###   ########.fr       */
+/*   Updated: 2026/06/07 15:52:17 by kkomurat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line_bonus.h"
+#include "get_next_line.h"
 
 char	*get_next_line(int fd)
 {
-	char		*buf;
+	static char	*stash;
+	char		*ret;
 	char		*tmp;
-	static char	*stash[OPEN_MAX];
-	int			read_ret;
 
-	if (fd < 0 || BUFFER_SIZE < 0)
-		return (NULL);
-	read_ret = 1;
-	while (gnl_strchr(stash[fd], '\n') == -1 && read_ret != 0)
+	stash = lead_to_stash(fd, stash);
+	if (!stash || stash[0] == '\0')
 	{
-		buf = malloc(sizeof(char) * BUFFER_SIZE + 1);
-		if (!buf)
-			return (gnl_free(&stash[fd], &buf, &tmp));
-		read_ret = read(fd, buf, BUFFER_SIZE);
-		if (read_ret == -1 || read_ret == 0)
-			return (gnl_free(&stash[fd], &buf, &tmp));
-		buf[read_ret] = '\0';
-		tmp = gnl_strjoin(stash[fd], buf);
-		free(stash[fd]);
-		stash[fd] = tmp;
-		tmp = NULL;
-		free(buf);
-	}
-	return (extract_line(&stash[fd], gnl_strchr(stash[fd], '\n')));
-}
-
-char	*gnl_free(char **stash, char **buf, char **tmp)
-{
-	free(*stash);
-	*stash = NULL;
-	free(*buf);
-	free(*tmp);
-	return (NULL);
-}
-
-char	*extract_line(char **stash, int size)
-{
-	char	*ret;
-	int		i;
-
-	if (!*stash || (*stash)[0] == '\0')
+		free(stash);
+		stash = NULL;
 		return (NULL);
-	if (size == -1)
-		size = ft_strlen(*stash);
-	ret = (char *)malloc(sizeof(char) * (size + 1));
-	if (!ret)
-		return (NULL);
-	i = 0;
-	while (i < size)
-	{
-		ret[i] = (*stash)[i];
-		i++;
 	}
-	ret[i] = '\0';
-	update_stash(stash, size);
+	ret = extract_line(stash);
+	tmp = update_stash(stash);
+	stash = tmp;
 	return (ret);
 }
 
-void	update_stash(char **stash, int size)
+char	*lead_to_stash(int fd, char *stash)
 {
-	char	*ret;
-	int		i;
-	int		total;
+	char		*buf;
+	int			read_len;
+	char		*tmp;
 
-	total = ft_strlen(*stash);
-	ret = (char *)malloc(sizeof(char) * (total - size + 1));
-	if (!ret)
-		return ;
-	i = 0;
-	while (i + size < total)
+	buf = (char *)malloc(BUFFER_SIZE + 1);
+	if (!buf)
+		return (NULL);
+	read_len = BUFFER_SIZE;
+	while (!gnl_strchr(stash, '\n') && read_len > 0)
 	{
-		ret[i] = (*stash)[i + size];
+		read_len = read(fd, buf, BUFFER_SIZE);
+		if (read_len < 0)
+		{
+			free(buf);
+			free(stash);
+			return (NULL);
+		}
+		buf[read_len] = '\0';
+		tmp = gnl_strjoin(stash, buf);
+		free(stash);
+		stash = tmp;
+	}
+	free(buf);
+	return (stash);
+}
+
+char	*extract_line(char *stash)
+{
+	int		i;
+	int		size;
+	char	*ret;
+
+	i = 0;
+	size = 0;
+	while (stash[size] && stash[size] != '\n')
+		size++;
+	ret = (char *)malloc(size + 2);
+	if (!ret)
+		return (NULL);
+	while (stash[i] && stash[i] != '\n')
+	{
+		ret[i] = stash[i];
 		i++;
 	}
+	if (stash[i] == '\n')
+		ret[i++] = '\n';
 	ret[i] = '\0';
-	free(*stash);
-	*stash = ret;
+	return (ret);
 }
 
-#include <fcntl.h>
-#include <stdio.h>
-
-int	main(void)
+char	*update_stash(char *stash)
 {
-	int		fd;
-	int		fd2;
-	char	*line;
-	char	*line2;
+	int		start;
+	char	*ret;
 
-	fd = open("test.txt", O_RDONLY);
-	if (fd == -1)
-	{
-		printf("cant open\n");
-		return (1);
-	}
-	fd2 = open("test2.txt", O_RDONLY);
-	if (fd == -1)
-	{
-		printf("cant open\n");
-		return (1);
-	}
-	while (1)
-	{
-		line = get_next_line(fd);
-		line2 = get_next_line(fd2);
-		if (line == NULL && line2 == NULL)
-			break;
-		if (line != NULL)
-		{
-			printf("%s", line);
-		}
-		if (line2 != NULL)
-		{
-			printf("%s", line2);
-		}
-		free(line);
-		line = NULL;
-		free(line2);
-		line = NULL;
-	}
-	close(fd);
-	close(fd2);
-	return (0);
+	start = 0;
+	while (stash[start] && stash[start] != '\n')
+		start++;
+	ret = ft_substr(stash, start + 1, ft_strlen(stash));
+	if (!ret)
+		return (NULL);
+	free(stash);
+	return (ret);
 }
+
+// #include <fcntl.h>
+// #include <stdio.h>
+// 
+// int	main(void)
+// {
+// 	int		fd;
+// 	char	*line;
+// 
+// 	fd = open("test.txt", O_RDONLY);
+// 	if (fd == -1)
+// 	{
+// 		printf("cant open\n");
+// 		return (1);
+// 	}
+// 	while (1)
+// 	{
+// 		line = get_next_line(fd);
+// 		if (line == NULL)
+// 			break;
+// 		printf("%s", line);
+// 		free(line);
+// 		line = NULL;
+// 	}
+// 	close(fd);
+// 	return (0);
+// }

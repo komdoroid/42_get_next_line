@@ -6,7 +6,7 @@
 /*   By: kkomurat <kkomurat@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 15:52:35 by kkomurat          #+#    #+#             */
-/*   Updated: 2026/06/07 15:35:14 by kkomurat         ###   ########.fr       */
+/*   Updated: 2026/06/07 15:52:17 by kkomurat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ char	*lead_to_stash(int fd, char *stash)
 		if (read_len < 0)
 		{
 			free(buf);
+			free(stash);
 			return (NULL);
 		}
 		buf[read_len] = '\0';
@@ -97,29 +98,29 @@ char	*update_stash(char *stash)
 	return (ret);
 }
 
-#include <fcntl.h>
-#include <stdio.h>
-
-int	main(void)
-{
-	int		fd;
-	char	*line;
-
-	fd = open("test.txt", O_RDONLY);
-	if (fd == -1)
-	{
-		printf("cant open\n");
-		return (1);
-	}
-	while (1)
-	{
-		line = get_next_line(fd);
-		if (line == NULL)
-			break;
-		printf("%s", line);
-		free(line);
-		line = NULL;
-	}
-	close(fd);
-	return (0);
-}
+// #include <fcntl.h>
+// #include <stdio.h>
+// 
+// int	main(void)
+// {
+// 	int		fd;
+// 	char	*line;
+// 
+// 	fd = open("test.txt", O_RDONLY);
+// 	if (fd == -1)
+// 	{
+// 		printf("cant open\n");
+// 		return (1);
+// 	}
+// 	while (1)
+// 	{
+// 		line = get_next_line(fd);
+// 		if (line == NULL)
+// 			break;
+// 		printf("%s", line);
+// 		free(line);
+// 		line = NULL;
+// 	}
+// 	close(fd);
+// 	return (0);
+// }

@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_bonus.h                              :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kkomurat <kkomurat@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/02 20:17:17 by kkomurat          #+#    #+#             */
-/*   Updated: 2026/06/05 22:16:47 by kkomurat         ###   ########.fr       */
+/*   Updated: 2026/06/07 14:40:53 by kkomurat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_BONUS_H
-# define GET_NEXT_LINE_BONUS_H
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
 # include <limits.h>
 # include <stdlib.h>
@@ -24,10 +24,13 @@
 # endif
 
 char	*get_next_line(int fd);
+char	*lead_to_stash(int fd, char *stash);
 char	*gnl_free(char **stash, char **buf, char **tmp);
-char	*extract_line(char **stash, int size);
-void	update_stash(char **stash, int size);
+char	*extract_line(char *stash);
+char	*update_stash(char *stash);
 int		ft_strlen(const char *str);
 char	*gnl_strjoin(char const *s1, char const *s2);
-int		gnl_strchr(const char *s, int c);
+char	*gnl_strchr(char *s, int c);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
+char	*ft_strdup(const char *s);
 #endif

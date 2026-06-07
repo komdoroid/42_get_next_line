@@ -6,7 +6,7 @@
 /*   By: kkomurat <kkomurat@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/02 20:37:15 by kkomurat          #+#    #+#             */
-/*   Updated: 2026/06/07 14:48:23 by kkomurat         ###   ########.fr       */
+/*   Updated: 2026/06/07 15:46:36 by kkomurat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,8 @@ char	*gnl_strjoin(char const *s1, char const *s2)
 
 char	*gnl_strchr(char *s, int c)
 {
-	int	i;
-
 	if (!s)
 		return (NULL);
-	i = 0;
 	while (*s != '\0')
 	{
 		if (*s == (char)c)
