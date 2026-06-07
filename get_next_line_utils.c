@@ -6,7 +6,7 @@
 /*   By: kkomurat <kkomurat@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/02 20:37:15 by kkomurat          #+#    #+#             */
-/*   Updated: 2026/06/05 19:51:41 by kkomurat         ###   ########.fr       */
+/*   Updated: 2026/06/07 14:17:16 by kkomurat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char	*gnl_strjoin(char const *s1, char const *s2)
 	return (strjoin);
 }
 
-char	*gnl_strchr(const char *s, int c)
+char	*gnl_strchr(char *s, int c)
 {
 	int	i;
 
@@ -93,4 +93,22 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	}
 	substr[i] = '\0';
 	return (substr);
+}
+
+char	*ft_strdup(const char *s)
+{
+	char	*dup;
+	int		i;
+
+	dup = (char *)malloc(sizeof(char) * (ft_strlen(s) + 1));
+	if (dup == NULL)
+		return (NULL);
+	i = 0;
+	while (s[i] != '\0')
+	{
+		dup[i] = s[i];
+		i++;
+	}
+	dup[i] = '\0';
+	return (dup);
 }
