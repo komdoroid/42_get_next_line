@@ -6,7 +6,7 @@
 /*   By: kkomurat <kkomurat@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 15:52:35 by kkomurat          #+#    #+#             */
-/*   Updated: 2026/06/07 14:44:16 by kkomurat         ###   ########.fr       */
+/*   Updated: 2026/06/07 15:35:14 by kkomurat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,11 @@ char	*get_next_line(int fd)
 
 	stash = lead_to_stash(fd, stash);
 	if (!stash || stash[0] == '\0')
+	{
+		free(stash);
+		stash = NULL;
 		return (NULL);
+	}
 	ret = extract_line(stash);
 	tmp = update_stash(stash);
 	stash = tmp;
@@ -56,8 +60,8 @@ char	*lead_to_stash(int fd, char *stash)
 
 char	*extract_line(char *stash)
 {
-	int	i;
-	int	size;
+	int		i;
+	int		size;
 	char	*ret;
 
 	i = 0;
@@ -80,7 +84,7 @@ char	*extract_line(char *stash)
 
 char	*update_stash(char *stash)
 {
-	int	start;
+	int		start;
 	char	*ret;
 
 	start = 0;
@@ -110,12 +114,12 @@ int	main(void)
 	while (1)
 	{
 		line = get_next_line(fd);
-		if (line != NULL)
-			printf("%s", line);
 		if (line == NULL)
 			break;
+		printf("%s", line);
+		free(line);
+		line = NULL;
 	}
-	free(line);
 	close(fd);
 	return (0);
 }

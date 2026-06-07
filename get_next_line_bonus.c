@@ -6,7 +6,7 @@
 /*   By: kkomurat <kkomurat@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 15:52:35 by kkomurat          #+#    #+#             */
-/*   Updated: 2026/06/05 22:40:17 by kkomurat         ###   ########.fr       */
+/*   Updated: 2026/06/07 15:39:37 by kkomurat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,7 @@ char	*get_next_line(int fd)
 	static char	*stash[OPEN_MAX];
 	int			read_ret;
 
-	buf = NULL;
-	tmp = NULL;
-	if (fd < 0 || BUFFER_SIZE < 0
+	if (fd < 0 || BUFFER_SIZE < 0)
 		return (NULL);
 	read_ret = 1;
 	while (gnl_strchr(stash[fd], '\n') == -1 && read_ret != 0)
@@ -120,16 +118,22 @@ int	main(void)
 	while (1)
 	{
 		line = get_next_line(fd);
-		if (line != NULL)
-			printf("%s", line);
 		line2 = get_next_line(fd2);
-		if (line2 != NULL)
-			printf("%s", line2);
 		if (line == NULL && line2 == NULL)
 			break;
+		if (line != NULL)
+		{
+			printf("%s", line);
+		}
+		if (line2 != NULL)
+		{
+			printf("%s", line2);
+		}
+		free(line);
+		line = NULL;
+		free(line2);
+		line = NULL;
 	}
-	free(line);
-	free(line2);
 	close(fd);
 	close(fd2);
 	return (0);
